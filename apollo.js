@@ -1,5 +1,5 @@
 const apolloClientOptions = {
-  uri: "https://secondfamily.herokuapp.com/"
+  uri: "http://localhost:4000"
 };
 
 export default apolloClientOptions;

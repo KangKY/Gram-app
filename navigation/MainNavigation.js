@@ -1,8 +1,13 @@
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import TabNavigation from "../navigation/TabNavigation";
+import TabNavigation from "./TabNavigation";
+import PhotoNavigation from "./PhotoNavigation";
 
 const MainNavigation = createStackNavigator({
-  TabNavigation
+  TabNavigation,
+  PhotoNavigation
+},{
+  headerMode:"none",
+  mode:"modal"
 });
 
 export default createAppContainer(MainNavigation);
