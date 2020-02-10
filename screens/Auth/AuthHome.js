@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 const View = styled.View`
   justify-content: center;
