@@ -1,6 +1,4 @@
 import React from 'react';
-import {Text, TouchableOpacity } from 'react-native';
-
 import {
   createBottomTabNavigator,
   createStackNavigator
@@ -11,7 +9,8 @@ import Home from "../screens/Home";
 import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
-import { View } from "react-native";
+import MessagesLink from "../components/MessagesLink";
+import { View } from 'react-native';
 
 
 const stackFactory = (initialRoute, customConfig) =>
@@ -25,7 +24,7 @@ const TabNavigation = createBottomTabNavigator({
   Home: {
     screen: stackFactory(Home, {
       title: "홈",
-      headerRight:<TouchableOpacity><Text>하이</Text></TouchableOpacity>
+      headerRight:<MessagesLink />
     })
   },
   Search: {
