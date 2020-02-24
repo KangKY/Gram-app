@@ -1,11 +1,14 @@
-import React from "react";
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import React, { useState } from "react";
+import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import styled from "styled-components";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import constants from "../../constants";
 import useInput from "../../hooks/useInput";
 import { Alert } from "react-native";
+import { LOG_IN } from "./AuthQueries";
+import { useMutation } from "react-apollo-hooks";
+import { useLogIn } from "../../AuthContext";
 
 const View = styled.View`
   justify-content: center;
@@ -18,19 +21,48 @@ const Image = styled.Image`
   margin-bottom: -20px;
 `;
 
-export default () => {
-  const emailInput = useInput("");
+export default ({ navigation }) => {
+  const emailInput = useInput(navigation.getParam("email",""));
   const passwordInput = useInput("");
+  const logIn = useLogIn();
+  const [loading, setLoading] = useState(false);
+  const [requestLoginMutation] = useMutation(LOG_IN, {
+    variables: {
+      email: emailInput.value,
+      password: passwordInput.value
+    }
+  });
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const { value } = emailInput;
+    
+    
     const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(value === "") {
+    if (value === "") {
       return Alert.alert("이메일을 입력해주세요.");
-    } else if(!emailRegex.test(value)) {
+    } else if (!emailRegex.test(value)) {
       return Alert.alert("잘못된 이메일 형식입니다.");
-    } else if(value === "") {
+    } else if (value === "") {
       return Alert.alert("이메일을 입력해주세요.");
+    }
+
+    try {
+      setLoading(true);
+      const { data : { requestLogin } } =  await requestLoginMutation();
+      console.log("requestLogin:", requestLogin);
+      if(requestLogin) {
+        logIn(requestLogin)
+        //navigation.navigate("Home", { email:value });
+      }
+      else {
+        Alert.alert("해당 계정이 존재하지 않습니다.");
+        navigation.navigate("Signup");
+      }
+    } catch (e) {
+      console.log(e);
+      Alert.alert("로그인에 실패하였습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,7 +80,7 @@ export default () => {
           keyboardType="email-address"
           returnKeyType="send"
           autoCorrect={false}
-          onEndEditing={handleLogin}
+          onSubmitEditing={handleLogin}
         />
         <AuthInput
           value=""
@@ -56,11 +88,10 @@ export default () => {
           placeholder="비밀번호"
           secureTextEntry={true}
           returnKeyType="send"
-          onEndEditing={handleLogin}
+          onSubmitEditing={handleLogin}
         />
-        <AuthButton text="로그인" onPress={handleLogin} />
+        <AuthButton loading={loading} text="로그인" onPress={handleLogin} />
       </View>
     </TouchableWithoutFeedback>
-    
   );
 };
