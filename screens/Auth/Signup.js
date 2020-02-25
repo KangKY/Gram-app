@@ -1,12 +1,14 @@
 import React, { useState } from "react";
+import { Alert, TouchableWithoutFeedback, Keyboard } from "react-native";
 import styled from "styled-components";
+//import { Facebook } from 'expo';
+import { useMutation } from "react-apollo-hooks";
 import AuthButton from "../../components/AuthButton";
 import AuthInput from "../../components/AuthInput";
 import constants from "../../constants";
 import useInput from "../../hooks/useInput";
 import { CREATE_ACCOUNT } from "./AuthQueries";
-import { useMutation } from "react-apollo-hooks";
-import { Alert } from "react-native";
+import * as Facebook from 'expo-facebook';
 
 const View = styled.View`
   justify-content: center;
@@ -19,8 +21,16 @@ const Image = styled.Image`
   margin-bottom: -20px;
 `;
 
-export default ({navigation}) => {
-  const emailInput = useInput(navigation.getParam("email",""));
+const FBContainer = styled.View`
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top-width: 1px;
+  border-top-color: ${props => props.theme.lightGreyColor};
+  border-style: solid;
+`;
+
+export default ({ navigation }) => {
+  const emailInput = useInput(navigation.getParam("email", ""));
   const usernameInput = useInput("");
   const passwordInput = useInput("");
   const [loading, setLoading] = useState(false);
@@ -51,51 +61,89 @@ export default ({navigation}) => {
         data: { createAccount }
       } = await createAccountMutation();
       if (createAccount) {
-        navigation.navigate("Login", {email:value});
+        navigation.navigate("Login", { email: value });
       }
     } catch (e) {
       //console.log(e);
-      if(e.message.includes("already")) {
-        Alert.alert("회원가입 실패","이메일 또는 사용자 이름이 존재합니다.");
-        navigation.navigate("Login", {email:value});
+      if (e.message.includes("already")) {
+        Alert.alert("회원가입 실패", "이메일 또는 사용자 이름이 존재합니다.");
+        navigation.navigate("Login", { email: value });
       } else {
-        Alert.alert("회원가입 실패","오류가 발생하였습니다.");
+        Alert.alert("회원가입 실패", "오류가 발생하였습니다.");
       }
-      
     } finally {
       setLoading(false);
     }
   };
 
+  const FBLogin = async () => {
+    try {
+      setLoading(true);
+      const {
+        type,
+        token,
+        expires,
+        permissions,
+        declinedPermissions,
+      } = await Facebook.logInWithReadPermissionsAsync('191348122101549', {
+        permissions: ['public_profile', 'email'],
+      });
+      if (type === 'success') {
+        // Get the user's name using Facebook's Graph API
+        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fileds=email,first_name,last_name`);
+        Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
+        const fbData = await response.json();
+        console.log(fbData);
+        setLoading(false);
+      } else {
+        // type === 'cancel'
+      }
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+      //setLoading(true);
+    }
+  }
   return (
-    <View>
-      <Image
-        resizeMode={"contain"}
-        source={require("../../assets/instagram.png")}
-      ></Image>
-      <AuthInput
-        {...emailInput}
-        placeholder="이메일"
-        keyboardType="email-address"
-        onSubmitEditing={handleCreateAccount}
-      />
-      <AuthInput
-        {...usernameInput}
-        placeholder="이름"
-        onSubmitEditing={handleCreateAccount}
-      />
-      <AuthInput
-        {...passwordInput}
-        placeholder="비밀번호"
-        secureTextEntry={true}
-        autoCorrect={false}
-        onSubmitEditing={handleCreateAccount}
-      />
-      <AuthButton
-        loading={loading}
-        text={"회원가입"}
-        onPress={handleCreateAccount}
-      />
-    </View>
+    <>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View>
+          <Image
+            resizeMode={"contain"}
+            source={require("../../assets/instagram.png")}
+          ></Image>
+          <AuthInput
+            {...emailInput}
+            placeholder="이메일"
+            keyboardType="email-address"
+            onSubmitEditing={handleCreateAccount}
+          />
+          <AuthInput
+            {...usernameInput}
+            placeholder="이름"
+            onSubmitEditing={handleCreateAccount}
+          />
+          <AuthInput
+            {...passwordInput}
+            placeholder="비밀번호"
+            secureTextEntry={true}
+            autoCorrect={false}
+            onSubmitEditing={handleCreateAccount}
+          />
+          <AuthButton
+            loading={loading}
+            text={"회원가입"}
+            onPress={handleCreateAccount}
+          />
+          <FBContainer>
+            <AuthButton
+              loading={false}
+              onPress={FBLogin}
+              bgColor={"#2D4DA7"}
+              text={"페이스북으로 로그인"}
+            />
+          </FBContainer>
+        </View>
+      </TouchableWithoutFeedback>
+    </>
   );
 };
