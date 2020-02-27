@@ -44,6 +44,8 @@ export default ({ navigation }) => {
       return Alert.alert("잘못된 이메일 형식입니다.");
     } else if (value === "") {
       return Alert.alert("이메일을 입력해주세요.");
+    }  else if (passwordInput.value === "") {
+      return Alert.alert("비밀번호를 입력해주세요.");
     }
 
     try {

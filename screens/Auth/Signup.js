@@ -79,26 +79,31 @@ export default ({ navigation }) => {
   const FBLogin = async () => {
     try {
       setLoading(true);
+      
       const {
         type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions,
+        token
       } = await Facebook.logInWithReadPermissionsAsync('191348122101549', {
         permissions: ['public_profile', 'email'],
       });
+      
       if (type === 'success') {
         // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}&fileds=email,first_name,last_name`);
-        Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-        const fbData = await response.json();
-        console.log(fbData);
+        const response = await fetch(`https://graph.facebook.com/me?fields=id,email,name&access_token=${token}`);
+
+        const { email, name } = await response.json();
+        //console.log(data);
+
+        emailInput.setValue(email);
+        usernameInput.setValue(name);
+
         setLoading(false);
       } else {
         // type === 'cancel'
       }
+
     } catch ({ message }) {
+      console.log(message);
       alert(`Facebook Login Error: ${message}`);
       //setLoading(true);
     }

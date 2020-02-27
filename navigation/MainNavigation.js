@@ -11,6 +11,7 @@ const MainNavigation = createStackNavigator(
     MessageNavigation
   },
   {
+    headerLayoutPreset:"center",
     headerMode: "none",
     mode: "modal"
   }
