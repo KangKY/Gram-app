@@ -12,11 +12,18 @@ import Profile from "../screens/Profile";
 import MessagesLink from "../components/MessagesLink";
 import { View } from 'react-native';
 import NavIcon from '../components/NavIcon';
+import { stackStyles } from './config';
 
 
 const stackFactory = (initialRoute, customConfig) =>
   createStackNavigator({
-    InialRoute: { screen: initialRoute, navigationOptions: { ...customConfig } }
+    InialRoute: { 
+      screen: initialRoute, 
+      navigationOptions: { 
+        ...customConfig,
+        headerStyle:{ ...stackStyles }
+      } 
+    }
   }, {
     headerLayoutPreset:"center"
   });
@@ -31,7 +38,9 @@ const TabNavigation = createBottomTabNavigator({
       headerTitle: <Image style={{height:35}} source={require("../assets/instagram.png")} resizeMode="contain" />
     }),
     navigationOptions : {
-      tabBarIcon:<NavIcon name={Platform.OS === "ios" ? "ios-home" : "md-home"}/>
+      tabBarIcon: ({focused}) => ( 
+        <NavIcon focused={focused} name={Platform.OS === "ios" ? "ios-home" : "md-home"}/>
+      )
     }
   },
   Search: {
@@ -39,7 +48,9 @@ const TabNavigation = createBottomTabNavigator({
       title: "검색"
     }),
     navigationOptions : {
-      tabBarIcon:<NavIcon name={Platform.OS === "ios" ? "ios-search" : "md-search"}/>
+      tabBarIcon: ({focused}) => ( 
+        <NavIcon focused={focused} name={Platform.OS === "ios" ? "ios-search" : "md-search"}/>
+      )
     }
   },
   Add: {
@@ -48,7 +59,9 @@ const TabNavigation = createBottomTabNavigator({
       tabBarOnPress: ({ navigation }) => {
         navigation.navigate("PhotoNavigation");
       },
-      tabBarIcon:<NavIcon name={Platform.OS === "ios" ? "ios-add" : "md-add"}/>
+      tabBarIcon: ({focused}) => ( 
+        <NavIcon focused={focused} name={Platform.OS === "ios" ? "ios-add" : "md-add"}/>
+      )
     }
   },
   Notifications: {
@@ -56,7 +69,9 @@ const TabNavigation = createBottomTabNavigator({
       title: "알림"
     }),
     navigationOptions : {
-      tabBarIcon:<NavIcon name={Platform.OS === "ios" ? "ios-heart" : "md-heart"}/>
+      tabBarIcon: ({focused}) => ( 
+        <NavIcon focused={focused} name={Platform.OS === "ios" ? "ios-heart" : "md-heart"}/>
+      )
     }
   },
   Profile: {
@@ -64,12 +79,17 @@ const TabNavigation = createBottomTabNavigator({
       title: "프로필"
     }),
     navigationOptions : {
-      tabBarIcon:<NavIcon name={Platform.OS === "ios" ? "ios-person" : "md-person"}/>
+      tabBarIcon: ({focused}) => ( 
+        <NavIcon focused={focused} name={Platform.OS === "ios" ? "ios-person" : "md-person"}/>
+      )
     }
   }
 }, {
   tabBarOptions:{
-    showLabel:false
+    showLabel:false,
+    style : {
+      backgroundColor:"#FAFAFA"
+    }
   }
 });
 

@@ -6,9 +6,10 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ isLoggedIn: isLoggedInProp, children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInProp); // false로 안한 이유는 로그아웃도 판단하기 위해
 
-  const logUserIn = async () => {
+  const logUserIn = async token => {
     try {
       await AsyncStorage.setItem("isLoggedIn", "true");
+      await AsyncStorage.setItem("jwt", token);
       setIsLoggedIn(true);
     } catch (e) {
       console.log(e);

@@ -51,7 +51,6 @@ export default ({ navigation }) => {
     try {
       setLoading(true);
       const { data : { requestLogin } } =  await requestLoginMutation();
-      console.log("requestLogin:", requestLogin);
       if(requestLogin) {
         logIn(requestLogin)
         //navigation.navigate("Home", { email:value });
