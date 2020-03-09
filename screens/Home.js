@@ -27,6 +27,10 @@ const FEED_QUERY = gql`
           username
         }
       }
+      files {
+        id
+        url
+      }
       createdAt
     }
   }
