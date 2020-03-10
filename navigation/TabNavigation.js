@@ -9,6 +9,7 @@ import Home from "../screens/Home";
 import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
+import Detail from "../screens/Detail";
 import MessagesLink from "../components/MessagesLink";
 import { View } from 'react-native';
 import NavIcon from '../components/NavIcon';
@@ -17,13 +18,14 @@ import { stackStyles } from './config';
 
 const stackFactory = (initialRoute, customConfig) =>
   createStackNavigator({
-    InialRoute: { 
+    initialRoute: { 
       screen: initialRoute, 
       navigationOptions: { 
         ...customConfig,
         headerStyle:{ ...stackStyles }
       } 
-    }
+    },
+    Detail
   }, {
     headerLayoutPreset:"center"
   });
@@ -33,7 +35,6 @@ const stackFactory = (initialRoute, customConfig) =>
 const TabNavigation = createBottomTabNavigator({
   Home: {
     screen: stackFactory(Home, {
-      //title: "홈",
       headerRight:<MessagesLink />,
       headerTitle: <Image style={{height:35}} source={require("../assets/instagram.png")} resizeMode="contain" />
     }),

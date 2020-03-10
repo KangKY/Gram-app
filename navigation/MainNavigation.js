@@ -20,5 +20,5 @@ const MainNavigation = createStackNavigator(
     mode: "modal"
   }
 );
-console.log("MainNavigation!!");
+
 export default createAppContainer(MainNavigation);
