@@ -3,37 +3,18 @@ import styled from "styled-components";
 import Loader from "../components/Loader";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
+import { POST_FRAGMENT } from "../fragments";
 import { ScrollView, RefreshControl } from 'react-native'; // 성능이 필요한 경우 FlatList 사용
 import Post from "../components/Post";
+
 
 const FEED_QUERY = gql`
   {
     seeFeed {
-      id
-      location
-      caption
-      user {
-        id
-        avatar
-        username
-      }
-      likeCount
-      isLiked
-      comments {
-        id
-        text
-        user {
-          id
-          username
-        }
-      }
-      files {
-        id
-        url
-      }
-      createdAt
+      ...PostParts
     }
   }
+  ${POST_FRAGMENT}
 `;
 
 const View = styled.View`

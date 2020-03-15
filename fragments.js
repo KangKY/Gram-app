@@ -35,7 +35,7 @@ export const USER_FRAGMENT = gql`
     username
     fullName
     isFollowing
-    isSelf
+    itsMe
     bio
     followingCount
     followersCount

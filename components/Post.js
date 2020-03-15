@@ -39,33 +39,43 @@ const Location = styled.Text`
 `;
 
 const IconsContainer = styled.View`
-  flex-direction:row;
-  margin-bottom:5px;
+  flex-direction: row;
+  margin-bottom: 5px;
 `;
 const IconContainer = styled.View`
   margin-right: 10px;
 `;
 
 const InfoContainer = styled.View`
-  padding:10px;
+  padding: 10px;
 `;
 
 const CaptionContainer = styled.View`
-  flex-direction:row;
+  flex-direction: row;
 `;
 
 const Caption = styled.Text`
-  margin-left:5px;
+  margin-left: 5px;
 `;
 
 const CommentCount = styled.Text`
-  margin-top:5px;
-  opacity:0.5;
-  font-size:12px;
+  margin-top: 5px;
+  opacity: 0.5;
+  font-size: 12px;
 `;
 
-const Post = ({ id, user, location, files = [], likeCount:likeCountProp, caption, comments = [], isLiked:isLikedProp }) => {
-  const[ isLiked, setIsLiked ] = useState(isLikedProp);
+const Post = ({
+  id,
+  user,
+  location,
+  files = [],
+  likeCount: likeCountProp,
+  caption,
+  comments = [],
+  isLiked: isLikedProp,
+  navigation
+}) => {
+  const [isLiked, setIsLiked] = useState(isLikedProp);
 
   const [likeCount, setLikeCount] = useState(likeCountProp);
   const [toggleLikeMutaton] = useMutation(TOGGLE_LIKE, {
@@ -88,27 +98,59 @@ const Post = ({ id, user, location, files = [], likeCount:likeCountProp, caption
     }
   };
 
-
   return (
     <Container>
       <Header>
-        <Touchable>
+        <Touchable
+          onPress={() =>
+            navigation.navigate("UserDetail", { username: user.username })
+          }
+        >
           <Image
             style={{ height: 40, width: 40, borderRadius: 20 }}
             source={{ uri: user.avatar }}
           />
         </Touchable>
-        <Touchable>
+        <Touchable
+          onPress={() =>
+            navigation.navigate("UserDetail", { username: user.username })
+          }
+        >
           <HeaderUserContainer>
             <Bold>{user.username}</Bold>
             <Location>{location}</Location>
           </HeaderUserContainer>
         </Touchable>
       </Header>
-      <Swiper 
-      dot={<View style={{marginTop:10, backgroundColor: 'rgba(255,255,255,.3)', width: 9, height: 9, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-      activeDot={<View style={{marginTop:10, backgroundColor: '#fff', width: 9, height: 9, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-      style={{ height: constants.height / 2.5 }}>
+      <Swiper
+        dot={
+          <View
+            style={{
+              marginTop: 10,
+              backgroundColor: "rgba(255,255,255,.3)",
+              width: 9,
+              height: 9,
+              borderRadius: 7,
+              marginLeft: 7,
+              marginRight: 7
+            }}
+          />
+        }
+        activeDot={
+          <View
+            style={{
+              marginTop: 10,
+              backgroundColor: "#fff",
+              width: 9,
+              height: 9,
+              borderRadius: 7,
+              marginLeft: 7,
+              marginRight: 7
+            }}
+          />
+        }
+        style={{ height: constants.height / 2.5 }}
+      >
         {files &&
           files.map(file => (
             <Image
@@ -142,9 +184,7 @@ const Post = ({ id, user, location, files = [], likeCount:likeCountProp, caption
             <IconContainer>
               <EvilIcons
                 size={32}
-                name={
-                  Platform.OS === "ios" ? "comment" : "comment"
-                }
+                name={Platform.OS === "ios" ? "comment" : "comment"}
               />
             </IconContainer>
           </Touchable>
@@ -153,16 +193,19 @@ const Post = ({ id, user, location, files = [], likeCount:likeCountProp, caption
           <Bold>{`좋아요 ${likeCount}개`}</Bold>
         </Touchable>
         <CaptionContainer>
-          <Touchable><Bold>{user.username}</Bold></Touchable>
+          <Touchable
+            onPress={() =>
+              navigation.navigate("UserDetail", { username: user.username })
+            }
+          >
+            <Bold>{user.username}</Bold>
+          </Touchable>
           <Caption>{caption}</Caption>
         </CaptionContainer>
 
         <Touchable>
-          <CommentCount>
-            {`${comments.length}개 댓글 모두 보기`}
-          </CommentCount>
+          <CommentCount>{`${comments.length}개 댓글 모두 보기`}</CommentCount>
         </Touchable>
-        
       </InfoContainer>
     </Container>
   );

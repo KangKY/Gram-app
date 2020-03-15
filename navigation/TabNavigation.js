@@ -9,11 +9,13 @@ import Home from "../screens/Home";
 import Search from "../screens/Search";
 import Notifications from "../screens/Notifications";
 import Profile from "../screens/Profile";
+import UserDetail from "../screens/UserDetail";
 import Detail from "../screens/Detail";
 import MessagesLink from "../components/MessagesLink";
 import { View } from 'react-native';
 import NavIcon from '../components/NavIcon';
 import { stackStyles } from './config';
+import styles from '../styles';
 
 
 const stackFactory = (initialRoute, customConfig) =>
@@ -22,12 +24,28 @@ const stackFactory = (initialRoute, customConfig) =>
       screen: initialRoute, 
       navigationOptions: { 
         ...customConfig,
-        headerStyle:{ ...stackStyles }
+       
       } 
     },
-    Detail
+    Detail : {
+      screen: Detail,
+      navigationOptions : {
+        title:"게시물"
+      }
+    },
+    UserDetail : {
+      screen: UserDetail,
+      navigationOptions : ({navigation}) => ({
+        title:navigation.getParam("username")
+      })
+    }
   }, {
-    headerLayoutPreset:"center"
+    headerLayoutPreset:"center",
+    defaultNavigationOptions: {
+      headerStyle:{ ...stackStyles },
+      headerBackTitle:null,
+      headerTintColor:styles.blackColor
+    }
   });
 
   console.log("TabNavigation");
@@ -86,7 +104,7 @@ const TabNavigation = createBottomTabNavigator({
     }
   }
 }, {
-  initialRouteName:"Search",
+  initialRouteName:"Home",
   tabBarOptions:{
     showLabel:false,
     style : {
