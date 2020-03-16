@@ -28,7 +28,9 @@ const Text = styled.Text`
   font-weight: 600;
 `;
 
-export default ({navigation}) => {
+
+// 추후 앱 요청하는 화면을 따로 만들던가, 시작할 때 요청
+export default ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [hasPermission, setHasPermission] = useState(false);
   const [selected, setSelected] = useState();
@@ -38,34 +40,34 @@ export default ({navigation}) => {
     setSelected(photo);
   };
 
-  const getPhotos = async() => {
+  const getPhotos = async () => {
     try {
-      const { assets } = await MediaLibrary.getAssetsAsync();
+      const { assets } = await MediaLibrary.getAssetsAsync({
+        sortBy: [[MediaLibrary.SortBy.creationTime, false]]
+      });
       const [firstPhoto] = assets;
+      console.log(firstPhoto);
       setSelected(firstPhoto);
       setAllPhotos(assets);
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const askPermission = async () => {
     try {
-      const {status} = Permissions.askAsync(Permissions.CAMERA_ROLL);
+      const permission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       console.log(permission);
-      if(status === "granted") {
+      if (permission.status === "granted") {
         setHasPermission(true);
         getPhotos();
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       setHasPermission(false);
-    } finally {
-      setLoading(false);
     }
-    
   };
 
   const handleSelected = () => {
@@ -78,8 +80,41 @@ export default ({navigation}) => {
 
   return (
     <View>
-      {loading? <Loader /> :  <Text>SelectPhoto</Text>}
-     
+      {loading ? (
+        <Loader />
+      ) : (
+        <View>
+          {hasPermission ? (
+            <>
+              <Image
+                source={{ uri: selected.uri }}
+                style={{ width: constants.width, height: constants.height / 3 }}
+              />
+              <ScrollView 
+                contentContainerStyle={{
+                  flexDirection:"row",
+                  flexWrap: "wrap"
+                }}>
+                {allPhotos.map(photo => (
+                  <TouchableOpacity
+                    key={photo.id}
+                    onPress={() => changeSelected(photo)}
+                  >
+                    <Image
+                      source={{ uri: photo.uri }}
+                      style={{
+                        width: constants.width / 3,
+                        height: constants.height / 6,
+                        opacity: photo.id === selected.id? 0.5: 1
+                      }}
+                    />
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </>
+          ) : null}
+        </View>
+      )}
     </View>
   );
 };
