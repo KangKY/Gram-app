@@ -19,36 +19,38 @@ import styles from '../styles';
 
 
 const stackFactory = (initialRoute, customConfig) =>
-  createStackNavigator({
-    initialRoute: { 
-      screen: initialRoute, 
-      navigationOptions: { 
-        ...customConfig,
-       
-      } 
-    },
-    Detail : {
-      screen: Detail,
-      navigationOptions : {
-        title:"게시물"
+  createStackNavigator(
+    {
+      initialRoute: {
+        screen: initialRoute,
+        navigationOptions: {
+          ...customConfig
+        }
+      },
+      Detail: {
+        screen: Detail,
+        navigationOptions: {
+          title: "게시물"
+        }
+      },
+      UserDetail: {
+        screen: UserDetail,
+        navigationOptions: ({ navigation }) => ({
+          title: navigation.getParam("username")
+        })
       }
     },
-    UserDetail : {
-      screen: UserDetail,
-      navigationOptions : ({navigation}) => ({
-        title:navigation.getParam("username")
-      })
+    {
+      headerLayoutPreset: "center",
+      defaultNavigationOptions: {
+        headerStyle: { ...stackStyles },
+        headerBackTitle: null,
+        headerTintColor: styles.blackColor
+      }
     }
-  }, {
-    headerLayoutPreset:"center",
-    defaultNavigationOptions: {
-      headerStyle:{ ...stackStyles },
-      headerBackTitle:null,
-      headerTintColor:styles.blackColor
-    }
-  });
+  );
 
-  console.log("TabNavigation");
+
 
 const TabNavigation = createBottomTabNavigator({
   Home: {
@@ -64,7 +66,7 @@ const TabNavigation = createBottomTabNavigator({
   },
   Search: {
     screen: stackFactory(Search,{
-      title: "검색"
+      headerBackTitle:null
     }),
     navigationOptions : {
       tabBarIcon: ({focused}) => ( 

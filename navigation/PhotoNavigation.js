@@ -6,6 +6,33 @@ import UploadPhoto from "../screens/Photo/UploadPhoto";
 import { stackStyles } from "./config";
 import styles from "../styles";
 
+
+const stackFactory = (initialRoute, customConfig) =>
+  createStackNavigator(
+    {
+      initialRoute: {
+        screen: initialRoute,
+        navigationOptions: {
+          ...customConfig
+        }
+      },
+      Upload: {
+        screen: UploadPhoto,
+        navigationOptions: {
+          title: "업로드"
+        }
+      }
+    },
+    {
+      headerLayoutPreset: "center",
+      defaultNavigationOptions: {
+        headerStyle: { ...stackStyles },
+        headerBackTitle: null,
+        headerTintColor: styles.blackColor
+      }
+    }
+  );
+
 const PhotoTabs = createMaterialTopTabNavigator({
   SelectPhoto:{
     screen:SelectPhoto,
@@ -23,31 +50,40 @@ const PhotoTabs = createMaterialTopTabNavigator({
   tabBarPosition:"bottom",
   tabBarOptions: {
     indicatorStyle: {
-      backgroundColor: styles.blackColor
+      backgroundColor: styles.blackColor,
+      marginBottom:10
     },
     style : {
-      paddingBottom:5,
+      paddingBottom:10,
       ...stackStyles
     },
     labelStyle: {
       color:styles.blackColor,
       fontWeight: "600"
     }
-  },
-  navigationOptions : {
-    headerStyle: {
-      ...stackStyles
-    }
   }
 });
-console.log("PhotoNavigation")
 
 export default createStackNavigator({
   Tabs: {
     screen:PhotoTabs,
     navigationOptions: {
-      title:"사진 선택"
+      title: "사진 선택",
+      headerBackTitle: null
     }
   },
-  UploadPhoto
+  Upload: {
+    screen: UploadPhoto,
+    navigationOptions: {
+      title: "업로드"
+    }
+  }
+},{
+  defaultNavigationOptions : {
+    headerTintColor:styles.blackColor,
+    headerStyle: {
+      ...stackStyles
+    },
+    headerLayoutPreset:"center"
+  }
 })

@@ -8,7 +8,7 @@ import { ScrollView, RefreshControl } from 'react-native'; // 성능이 필요�
 import Post from "../components/Post";
 
 
-const FEED_QUERY = gql`
+export const FEED_QUERY = gql`
   {
     seeFeed {
       ...PostParts

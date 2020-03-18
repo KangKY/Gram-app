@@ -97,7 +97,7 @@ export default ({ navigation }) => {
                 width: constants.width,
                 height: constants.height / 2
               }}
-              //ratio={"16:9"}
+              ratio={"16:9"}
               type={type}
             >
 
