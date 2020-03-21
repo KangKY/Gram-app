@@ -38,9 +38,7 @@ export default () => {
     } finally {
       setRefreshing(false);
     }
-   
   }
-  console.log(data);
 
   return (
   <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}>

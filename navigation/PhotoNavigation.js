@@ -1,10 +1,21 @@
+import React from 'react';
 import { createStackNavigator, createMaterialTopTabNavigator } from "react-navigation";
-//import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import SelectPhoto from "../screens/Photo/SelectPhoto";
 import TakePhoto from "../screens/Photo/TakePhoto";
 import UploadPhoto from "../screens/Photo/UploadPhoto";
 import { stackStyles } from "./config";
 import styles from "../styles";
+import styled from 'styled-components';
+
+
+
+const TouchableOpacity = styled.TouchableOpacity``;
+const Text = styled.Text`
+  margin-right:10px;
+  font-weight:600;
+  font-size:15px;
+  padding:10px;
+`;
 
 
 const stackFactory = (initialRoute, customConfig) =>
@@ -36,13 +47,13 @@ const stackFactory = (initialRoute, customConfig) =>
 const PhotoTabs = createMaterialTopTabNavigator({
   SelectPhoto:{
     screen:SelectPhoto,
-    navigationOptions:{
-      tabBarLabel:"사진 선택"
+    navigationOptions: {
+      headerTitle:"Fuck"
     }
   },
   TakePhoto:{
     screen:TakePhoto,
-    navigationOptions:{
+    navigationOptions : {
       tabBarLabel:"사진 촬영"
     }
   }
@@ -67,9 +78,29 @@ const PhotoTabs = createMaterialTopTabNavigator({
 export default createStackNavigator({
   Tabs: {
     screen:PhotoTabs,
-    navigationOptions: {
-      title: "사진 선택",
-      headerBackTitle: null
+    navigationOptions: ({navigation}) => {
+      if(navigation.state.routes[navigation.state.index].routeName === "SelectPhoto") {
+        if(navigation.state.routes[navigation.state.index].params) {
+          return {
+            title: "사진 선택",
+            headerBackTitle: null,
+            headerRight:<TouchableOpacity onPress={navigation.state.routes[navigation.state.index].params.onSubmit}><Text>업로드</Text></TouchableOpacity>
+          }
+        } else {
+          return {
+            title: "사진 선택",
+            headerBackTitle: null,
+            headerRight:<TouchableOpacity onPress={() => {}}><Text>업로드</Text></TouchableOpacity>
+          }
+        }
+        
+      } else if(navigation.state.routes[navigation.state.index].routeName === "TakePhoto"){
+        return {
+          title: "사진 촬영",
+          headerBackTitle: null
+        }
+      }
+      
     }
   },
   Upload: {

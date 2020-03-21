@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { Image, ActivityIndicator, Alert } from "react-native";
@@ -56,13 +56,57 @@ const Text = styled.Text`
 export default ({ navigation }) => {
   const [loading, setIsLoading] = useState(false);
   const photo = navigation.getParam("photo");
-  const captionInput = useInput("dfdf");
-  const locationInput = useInput("dfdfd");
-  const uploadMutation = useMutation(UPLOAD, {
+  const captionInput = useInput("설명");
+  const locationInput = useInput("남한산성");
+  const [uploadMutation] = useMutation(UPLOAD, {
     refetchQueries: () => [{ query: FEED_QUERY }]
   });
 
+
   const handleSubmit = async () => {
+    if (captionInput.value === "" || locationInput.value === "") {
+      Alert.alert("모든 필드를 입력해주세요.");
+    }
+
+    const formData = new FormData();
+    const name = photo.filename;
+    const [, type] = name.split(".");
+    formData.append("post", {
+      name,
+      type:"image/jpeg",
+      uri: photo.uri
+    });
+    try {
+      setIsLoading(true);
+      const {
+        data: { location }
+      } = await axios.post("https://secondfamily.herokuapp.com/api/post/upload", formData, {
+        headers: {
+          "content-type": "multipart/form-data"
+        }
+      });
+
+      const {
+        data: { upload }
+      } = await uploadMutation({
+        variables: {
+          files: [location],
+          caption: captionInput.value,
+          location: locationInput.value
+        }
+      });
+
+      console.log(upload);
+
+      if (upload.id) {
+        navigation.navigate("TabNavigation");
+      }
+    } catch(e) {
+      console.log(e);
+      Alert.alert("Cant upload", "Try later");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -91,7 +135,7 @@ export default ({ navigation }) => {
             {loading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text>Upload </Text>
+              <Text>업로드</Text>
             )}
           </Button>
         </Form>

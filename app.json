@@ -4,6 +4,10 @@
     "slug": "gram-app",
     "privacy": "public",
     "sdkVersion": "33.0.0",
+    "android": {
+      "package": "com.trizcorp.secondfamilly",
+      "versionCode": 1
+    },
     "platforms": [
       "ios",
       "android"

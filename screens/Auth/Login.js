@@ -61,7 +61,16 @@ export default ({ navigation }) => {
       }
     } catch (e) {
       console.log(e);
-      Alert.alert("로그인에 실패하였습니다.");
+      if(e.message.indexOf("wrong") !== -1) {
+        Alert.alert("비밀번호가 틀렸습니다.");
+      }
+      else if(e.message.indexOf("exist") !== -1) {
+        Alert.alert("해당 계정이 존재하지 않습니다.");
+        navigation.navigate("Signup");
+      } else {
+        Alert.alert("로그인에 실패하였습니다.");
+      }
+    
     } finally {
       setLoading(false);
     }

@@ -1,13 +1,12 @@
 import React from "react";
 import SelectPhotoPresenter from "./SelectPhotoPresenter";
-import MessagesLink from "../../../components/MessagesLink";
-
 
 export default class extends React.Component {
-  static navigationOptions = ({navigation}) => ({
-    title:"갤러리",
-    headerRight:<MessagesLink onPress={navigation.getParam("onSubmit", () => null)} />,
-  });
+  static navigationOptions = () => {
+    return {
+      title:"갤러리"
+    }
+  };
 
   state = {
     selected:null
@@ -16,7 +15,7 @@ export default class extends React.Component {
   constructor(props) {
     super(props);
     const { navigation } = props;
-    console.log(navigation);
+    //console.log(navigation);
     this.state = {
       selected: null,
     };
@@ -30,7 +29,8 @@ export default class extends React.Component {
   }
   
   onSubmit = () => {
-    navigation.navigate("Upload", { photo: selected });
+    const { navigation } = this.props;
+    navigation.navigate("Upload", { photo: this.state.selected });
   };
 
   render() {
