@@ -28,7 +28,7 @@ const SquereContainer = styled.View`
 
 const SearchPresenter = ({ term, shouldFetch }) => {
   const [refreshing, setRefreshing] = useState(false);
-  const { data, loading, refetch } = useQuery(SEARCH, {
+  const { data, loading, refetch, error } = useQuery(SEARCH, {
     variables: {
       term
     },
@@ -36,6 +36,8 @@ const SearchPresenter = ({ term, shouldFetch }) => {
     //skip: !shouldFetch,
     fetchPolicy: "network-only"
   });
+
+  console.log(error);
   const onRefresh = async () => {
     try {
       setRefreshing(true);
@@ -49,12 +51,12 @@ const SearchPresenter = ({ term, shouldFetch }) => {
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl onRefresh={onRefresh} refreshing={refreshing} />
+        <RefreshControl  onRefresh={onRefresh} refreshing={refreshing} />
       }
     >
       <SquereContainer>
       {loading ? (
-        <Loader />
+        <Loader style={{paddingTop:30}}/>
       ) : (
         data &&
         data.searchPost &&

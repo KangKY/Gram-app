@@ -1,5 +1,7 @@
 import React from 'react';
-import { createStackNavigator, createMaterialTopTabNavigator } from "react-navigation";
+//import { createMaterialTopTabNavigator } from "react-navigation";
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from "react-navigation-stack";
 import SelectPhoto from "../screens/Photo/SelectPhoto";
 import TakePhoto from "../screens/Photo/TakePhoto";
 import UploadPhoto from "../screens/Photo/UploadPhoto";
@@ -35,7 +37,7 @@ const stackFactory = (initialRoute, customConfig) =>
       }
     },
     {
-      headerLayoutPreset: "center",
+      headerTitleAlign: "center",
       defaultNavigationOptions: {
         headerStyle: { ...stackStyles },
         headerBackTitle: null,
@@ -46,10 +48,7 @@ const stackFactory = (initialRoute, customConfig) =>
 
 const PhotoTabs = createMaterialTopTabNavigator({
   SelectPhoto:{
-    screen:SelectPhoto,
-    navigationOptions: {
-      headerTitle:"Fuck"
-    }
+    screen:SelectPhoto
   },
   TakePhoto:{
     screen:TakePhoto,
@@ -84,13 +83,13 @@ export default createStackNavigator({
           return {
             title: "사진 선택",
             headerBackTitle: null,
-            headerRight:<TouchableOpacity onPress={navigation.state.routes[navigation.state.index].params.onSubmit}><Text>업로드</Text></TouchableOpacity>
+            headerRight:() => <TouchableOpacity onPress={navigation.state.routes[navigation.state.index].params.onSubmit}><Text>업로드</Text></TouchableOpacity>
           }
         } else {
           return {
             title: "사진 선택",
             headerBackTitle: null,
-            headerRight:<TouchableOpacity onPress={() => {}}><Text>업로드</Text></TouchableOpacity>
+            headerRight:() => <TouchableOpacity onPress={() => {}}><Text>업로드</Text></TouchableOpacity>
           }
         }
         
@@ -115,6 +114,6 @@ export default createStackNavigator({
     headerStyle: {
       ...stackStyles
     },
-    headerLayoutPreset:"center"
+    headerTitleAlign:"center"
   }
 })

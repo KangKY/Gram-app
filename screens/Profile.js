@@ -5,11 +5,12 @@ import { USER_FRAGMENT } from "../fragments";
 import Loader from "../components/Loader";
 import { useQuery } from "react-apollo-hooks";
 import UserProfile from "../components/UserProfile";
+import { useLogOut } from "../AuthContext";
 
 export const ME = gql`
   {
     me {
-      ...UserParts
+      ...UserInfoParts
     }
   }
   ${USER_FRAGMENT}
@@ -18,6 +19,7 @@ export const ME = gql`
 export default ({ navigation }) => {
   const { loading, data, refetch } = useQuery(ME);
   const [refreshing, setRefreshing] = useState(false);
+  const logOut = useLogOut();
 
   const handleRefresh = async () => {
     try {
@@ -32,7 +34,7 @@ export default ({ navigation }) => {
   }
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}>
-      {loading ? <Loader /> : data && data.me && <UserProfile {...data.me} />}
+      {loading ? <Loader /> : data && data.me && <UserProfile logOut={logOut} {...data.me} />}
     </ScrollView>
   );
 };

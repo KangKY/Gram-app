@@ -3,7 +3,7 @@
     "name": "gram-app",
     "slug": "gram-app",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "36.0.0",
     "android": {
       "package": "com.trizcorp.secondfamilly",
       "versionCode": 1
@@ -28,6 +28,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": ""
   }
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Image, Platform } from "react-native";
 import styled from "styled-components";
-import { Ionicons, EvilIcons } from "@expo/vector-icons";
+import { Ionicons, EvilIcons, AntDesign } from "@expo/vector-icons";
 import PropTypes from "prop-types";
 import Swiper from "react-native-swiper";
 import { gql } from "apollo-boost";
@@ -27,19 +27,20 @@ const HeaderUserContainer = styled.View`
   margin-left: 10px;
 `;
 const Touchable = styled.TouchableOpacity``;
-const RowTouchable = styled.TouchableOpacity`
-  flex-direction: row;
-`;
+const TouchableWithoutFeedback = styled.TouchableWithoutFeedback``;
+
 const Bold = styled.Text`
-  font-weight: 500;
+  font-weight: bold;
 `;
 
 const Location = styled.Text`
+  margin-top:5px;
   font-size: 12px;
 `;
 
 const IconsContainer = styled.View`
   flex-direction: row;
+  justify-content:space-between;
   margin-bottom: 5px;
 `;
 const IconContainer = styled.View`
@@ -64,10 +65,15 @@ const CommentCount = styled.Text`
   font-size: 12px;
 `;
 
+const Rating = styled.Text`
+`;
+
 const Post = ({
   id,
   user,
   location,
+  avgRating,
+  reviewCount,
   files = [],
   likeCount: likeCountProp,
   caption,
@@ -76,13 +82,23 @@ const Post = ({
   navigation
 }) => {
   const [isLiked, setIsLiked] = useState(isLikedProp);
-
+  const [lastTap, setLastTap] = useState();
   const [likeCount, setLikeCount] = useState(likeCountProp);
   const [toggleLikeMutaton] = useMutation(TOGGLE_LIKE, {
     variables: {
       postId: id
     }
   });
+
+  const handleDoubleTap = () => {
+    const now = Date.now();
+    const DOUBLE_PRESS_DELAY = 300;
+    if (lastTap && (now - lastTap) < DOUBLE_PRESS_DELAY) {
+      handleLike();
+    } else {
+      setLastTap(now);
+    }
+  }
 
   const handleLike = async () => {
     if (isLiked === true) {
@@ -153,43 +169,64 @@ const Post = ({
       >
         {files &&
           files.map(file => (
-            <Image
-              style={{ width: constants.width, height: constants.height / 2.5 }}
-              key={file.id}
-              source={{ uri: file.url }}
-            />
+            <TouchableWithoutFeedback key={file.id} onPress={handleDoubleTap}>
+              <Image
+                style={{ width: constants.width, height: constants.height / 2.5 }}
+                source={{ uri: file.url }}
+              />
+            </TouchableWithoutFeedback>
           ))}
       </Swiper>
       <InfoContainer>
         <IconsContainer>
-          <Touchable onPress={handleLike}>
-            <IconContainer>
-              <Ionicons
-                size={28}
-                color={isLiked ? styles.redColor : styles.blackColor}
-                name={
-                  Platform.OS === "ios"
-                    ? isLiked
-                      ? "ios-heart"
-                      : "ios-heart-empty"
-                    : isLiked
-                    ? "md-heart"
-                    : "md-heart-empty"
-                }
-              />
-            </IconContainer>
-          </Touchable>
+          <View style={{ flexDirection:'row' }} >
+            <Touchable onPress={handleLike}>
+              <IconContainer>
+                <Ionicons
+                  size={28}
+                  color={isLiked ? styles.redColor : styles.blackColor}
+                  name={
+                    Platform.OS === "ios"
+                      ? isLiked
+                        ? "ios-heart"
+                        : "ios-heart-empty"
+                      : isLiked
+                      ? "md-heart"
+                      : "md-heart-empty"
+                  }
+                />
+              </IconContainer>
+            </Touchable>
 
-          <Touchable>
-            <IconContainer>
-              <EvilIcons
-                size={32}
-                name={Platform.OS === "ios" ? "comment" : "comment"}
-              />
-            </IconContainer>
-          </Touchable>
+            <Touchable onPress={() => navigation.navigate("PostDetail", { id }) } >
+              <IconContainer>
+                <EvilIcons
+                  size={32}
+                  name={Platform.OS === "ios" ? "comment" : "comment"}
+                />
+              </IconContainer>
+            </Touchable>
+          </View>
+          <View>
+            <Touchable 
+              onPress={() => navigation.navigate("ReviewDetail", { id }) }
+              style={{ flexDirection:'row', alignItems:'center' }} 
+            >
+              <IconContainer>
+                <AntDesign
+                  size={22}
+                  color={styles.yellowColor}
+                  name={Platform.OS === "ios" ? "star" : "star"}
+                />
+              </IconContainer>
+                <Rating>{avgRating} ({reviewCount})</Rating>
+            </Touchable>
+          </View>
+          
         </IconsContainer>
-        <Touchable>
+        <Touchable onPress={() =>
+              navigation.navigate("Likes", { type: 'post', id })
+            }>
           <Bold>{`좋아요 ${likeCount}개`}</Bold>
         </Touchable>
         <CaptionContainer>
@@ -203,7 +240,7 @@ const Post = ({
           <Caption>{caption}</Caption>
         </CaptionContainer>
 
-        <Touchable>
+        <Touchable onPress={() => navigation.navigate("PostDetail", { id }) }>
           <CommentCount>{`${comments.length}개 댓글 모두 보기`}</CommentCount>
         </Touchable>
       </InfoContainer>

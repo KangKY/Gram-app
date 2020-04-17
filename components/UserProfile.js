@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, View, TouchableOpacity } from "react-native";
+import { Image, View } from "react-native";
 import styled from "styled-components";
 import { Ionicons } from "@expo/vector-icons";
 import PropTypes from "prop-types";
@@ -8,7 +8,9 @@ import { Platform } from "@unimodules/core";
 import constants from "../constants";
 import SquarePhoto from "./SquarePhoto";
 import Post from "./Post";
-
+import AuthButton from "./AuthButton";
+import FollowButton from "./FollowButton";
+import { withNavigation } from "react-navigation";
 
 const ProfileHeader = styled.View`
   padding: 20px;
@@ -22,13 +24,42 @@ const ProfileStats = styled.View`
   flex-direction: row;
 `;
 
+const ProfileButtons = styled.View`
+  flex-direction: row;
+  flex:1;
+  margin-top:15px;
+`;
+
+const TouchableOpacity = styled.TouchableOpacity`
+  flex:1;
+`;
+
+const ProfileButton = styled.View`
+  background-color: ${props =>
+  props.bgColor ? props.bgColor : props.theme.blueColor};
+ 
+  border-width:1px;
+  border-color: ${props =>
+  props.borderColor ? props.borderColor : props.theme.blueColor};
+  padding: 5px 10px;
+  border-radius: 4px;
+  flex:1;
+  margin: 0px 10px;
+`;
+
+const ButtonText = styled.Text`
+  color: ${props => props.textColor ? props.bgColor : props.theme.blackColor};
+  text-align: center;
+  font-weight: 600;
+`;
+
 const Stat = styled.View`
   align-items: center;
   margin-left: 40px;
 `;
 
 const Bold = styled.Text`
-  font-weight: 600;
+  font-weight: bold;
 `;
 
 const StatName = styled.Text`
@@ -48,7 +79,7 @@ const ButtonContainer = styled.View`
   padding-vertical: 5px;
   border: 1px solid ${styles.lightGreyColor};
   flex-direction: row;
-  margin-top: 30px;
+  margin-top: 25px;
 `;
 
 const Button = styled.View`
@@ -63,17 +94,25 @@ const SquareContainer = styled.View`
 
 
 const UserProfile = ({
+  id,
+  itsMe,
+  isFollowing,
   avatar,
   postsCount,
   followersCount,
   followingCount,
   bio,
-  fullName,
   username,
-  posts
+  posts,
+  ourChat,
+  logOut,
+  navigation
 }) => {
   const [isGrid, setIsGrid] = useState(true);
   const toggleGrid = () => setIsGrid(i => !i);
+
+  //console.log(ourChat)
+
   return (
     <View>
       <ProfileHeader>
@@ -102,6 +141,46 @@ const UserProfile = ({
         <Bold>{username}</Bold>
         <Bio>{bio}</Bio>
       </ProfileMeta>
+      <ProfileButtons>
+        {itsMe ? (
+          <>
+            <TouchableOpacity>
+              <ProfileButton bgColor={"#fff"} borderColor={styles.darkGreyColor}>
+                <ButtonText>프로필 수정</ButtonText>
+              </ProfileButton>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={logOut}>
+              <ProfileButton bgColor={"#fff"} borderColor={styles.darkGreyColor}>
+                <ButtonText>로그아웃</ButtonText>
+              </ProfileButton>
+            </TouchableOpacity>
+          </>
+        ) : (
+          <>
+            <TouchableOpacity>
+              <FollowButton id={id} isFollowing={isFollowing}>
+                <ButtonText textColor={"#fff"} >팔로잉</ButtonText>
+              </FollowButton>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => 
+              ourChat.length > 0 ? navigation.navigate('Message', {
+                id:ourChat[0].id,
+                userId:id,
+                username
+              }):(
+                navigation.navigate('Message',{
+                  userId:id,
+                  username
+                })
+              )
+            }>
+              <ProfileButton bgColor={"#fff"} borderColor={styles.darkGreyColor}>
+                <ButtonText>메시지</ButtonText>
+              </ProfileButton>
+            </TouchableOpacity>
+          </>
+        )}
+      </ProfileButtons>
       <ButtonContainer>
         <TouchableOpacity onPress={toggleGrid}>
           <Button>
@@ -124,9 +203,9 @@ const UserProfile = ({
       </ButtonContainer>
       <SquareContainer>
         {posts &&
-          posts.map(p => (isGrid ? <SquarePhoto key={p.id} {...p} /> : null))}
+          posts.map((p) => (isGrid ? <SquarePhoto key={p.id} {...p} /> : null))}
       </SquareContainer>
-      {posts && posts.map(p => (isGrid ? null : <Post key={p.id} {...p} />))}
+      {posts && posts.map((p) => (isGrid ? null : <Post key={p.id} {...p} />))}
     </View>
   );
 };
@@ -175,4 +254,4 @@ UserProfile.propTypes = {
     })
   )
 };
-export default UserProfile;
+export default withNavigation(UserProfile);

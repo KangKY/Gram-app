@@ -1,6 +1,6 @@
 import { View } from "react-native";
-import { createAppContainer, createStackNavigator } from "react-navigation";
-//import { createStackNavigator } from "react-navigation-stack";
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import Signup from "../screens/Auth/Signup";
 import Confirm from "../screens/Auth/Confirm";
 import Login from "../screens/Auth/Login";
@@ -22,7 +22,7 @@ const AuthNavigation = createStackNavigator(
     Login
   },
   {
-    headerLayoutPreset:"center",
+    headerTitleAlign:"center",
     initialRouteName: "AuthHome",
     headerMode: "none"
   }

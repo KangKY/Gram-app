@@ -14,6 +14,8 @@ export const POST_FRAGMENT = gql`
       id
       url
     }
+    avgRating
+    reviewCount
     likeCount
     isLiked
     comments {
@@ -21,15 +23,17 @@ export const POST_FRAGMENT = gql`
       text
       user {
         id
+        avatar
         username
       }
     }
+
     createdAt
   }
 `;
 
 export const USER_FRAGMENT = gql`
-  fragment UserParts on User {
+  fragment UserInfoParts on User {
     id
     avatar
     username
@@ -40,6 +44,14 @@ export const USER_FRAGMENT = gql`
     followingCount
     followersCount
     postsCount
+    ourChat {
+      id
+      oppUser {
+        id
+        username
+        avatar
+      }
+    }
     posts {
       ...PostParts
     }

@@ -1,31 +1,31 @@
 import { createStackNavigator } from "react-navigation-stack";
-import Messages from "../screens/Messages/Messages";
-//import Messages from "../screens/Review/ReviewDetail";
-import Message from "../screens/Messages/Message";
+import ReviewDetail from "../screens/Review/ReviewDetail";
+import WriteReview from "../screens/Review/WriteReview";
 import { stackStyles } from "./config";
 import UserDetail from "../screens/UserDetail";
 
 export default createStackNavigator(
   {
-    Messages: {
-      screen: Messages,
-      navigationOptions: ({ navigation }) => ({
+    ReviewDetail: {
+      screen: ReviewDetail,
+      navigationOptions: {
         headerTitleAlign: "left",
-        title: "메시지"
-      })
+        title: "후기"
+      }
     },
-    Message: {
-      screen: Message,
-      navigationOptions: ({ navigation }) => ({
-        headerTitleAlign: "center",
-        title: navigation.getParam("username")
-      })
+    WriteReview: {
+      screen: WriteReview,
+      navigationOptions: {
+        //headerTitleAlign: "center",
+        headerBackTitle:" ",
+        title: "후기 작성"
+      }
     },
     UserDetail: {
       screen: UserDetail,
       navigationOptions: ({ navigation }) => ({
         headerTitleAlign: "center",
-        headerBackTitle:"",
+        headerBackTitle:" ",
         title: navigation.getParam("username")
       })
     },

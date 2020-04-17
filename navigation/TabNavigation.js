@@ -1,9 +1,6 @@
 import React from 'react';
-import {
-  createBottomTabNavigator,
-  createStackNavigator
-} from "react-navigation";
-//import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from "react-navigation-stack";
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { Image, Platform } from "react-native";
 import Home from "../screens/Home";
 import Search from "../screens/Search";
@@ -16,6 +13,10 @@ import { View } from 'react-native';
 import NavIcon from '../components/NavIcon';
 import { stackStyles } from './config';
 import styles from '../styles';
+import PostDetail from '../screens/PostDetail';
+import ReviewDetail from '../screens/Review/ReviewDetail';
+import Likes from '../screens/Likes';
+import WriteReview from '../screens/Review/WriteReview';
 
 
 const stackFactory = (initialRoute, customConfig) =>
@@ -24,28 +25,66 @@ const stackFactory = (initialRoute, customConfig) =>
       initialRoute: {
         screen: initialRoute,
         navigationOptions: {
+          headerTitleAlign: "center",
           ...customConfig
         }
       },
       Detail: {
         screen: Detail,
         navigationOptions: {
+          headerTitleAlign: "center",
           title: "게시물"
         }
       },
       UserDetail: {
         screen: UserDetail,
         navigationOptions: ({ navigation }) => ({
+          headerTitleAlign: "center",
           title: navigation.getParam("username")
         })
+      },
+      PostDetail: {
+        screen: PostDetail,
+        navigationOptions: ({ navigation }) => {
+          console.log(`navigation.state:`, navigation.state);
+          return ({
+            title: "댓글",
+          })
+        }
+      },
+      // ReviewDetail: {
+      //   screen: ReviewDetail,
+      //   navigationOptions: ({ navigation }) => {
+      //     return ({
+      //       title: "후기",
+      //       headerTitleAlign: "left"
+      //     })
+      //   }
+      // },
+      // WriteReview: {
+      //   screen: WriteReview,
+      //   navigationOptions: ({ navigation }) => {
+      //     return ({
+      //       title: "후기 작성",
+      //       headerTitleAlign: "left"
+      //     })
+      //   }
+      // }, 
+      Likes: {
+        screen: Likes,
+        navigationOptions: ({ navigation }) => {
+          return ({
+            title: "좋아요"
+          })
+        }
       }
     },
     {
-      headerLayoutPreset: "center",
       defaultNavigationOptions: {
         headerStyle: { ...stackStyles },
         headerBackTitle: null,
-        headerTintColor: styles.blackColor
+        headerTintColor: styles.blackColor,
+        headerBackTitle:" ",
       }
     }
   );
@@ -55,8 +94,8 @@ const stackFactory = (initialRoute, customConfig) =>
 const TabNavigation = createBottomTabNavigator({
   Home: {
     screen: stackFactory(Home, {
-      headerRight:<MessagesLink />,
-      headerTitle: <Image style={{height:35}} source={require("../assets/instagram.png")} resizeMode="contain" />
+      headerRight: () => <MessagesLink />,
+      headerTitle: () => <Image style={{height:35}} source={require("../assets/instagram.png")} resizeMode="contain" />
     }),
     navigationOptions : {
       tabBarIcon: ({focused}) => ( 

@@ -85,13 +85,12 @@ export default ({ selected, handleSelected,  }) => {
         <View>
           {hasPermission ? (
             <>
+            {selected && (
               <Image
                 source={{ uri: selected.uri }}
                 style={{ width: constants.width, height: constants.height / 2 }}
               />
-              {/* <Button onPress={handleSelected}>
-                <Text>업로드</Text>
-              </Button> */}
+            )}
 
               <ScrollView 
                 contentContainerStyle={{

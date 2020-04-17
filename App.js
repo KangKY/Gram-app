@@ -4,11 +4,11 @@ import { AppLoading } from "expo";
 import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import { AsyncStorage } from "react-native";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { persistCache } from "apollo-cache-persist";
-import ApolloClient from "apollo-boost";
+// import { InMemoryCache } from "apollo-cache-inmemory";
+// import { persistCache } from "apollo-cache-persist";
+// import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo-hooks";
-import apolloClientOptions from "./apollo";
+import apolloClient from "./apollo";
 import { ThemeProvider } from "styled-components";
 import styles from "./styles";
 import NavController from "./components/NavController";
@@ -26,23 +26,24 @@ export default function App() {
         ...Ionicons.font
       });
       await Asset.loadAsync([require("./assets/instagram.png")]);
-      const cache = new InMemoryCache();
-      await persistCache({
-        cache,
-        storage: AsyncStorage
-      });
 
+      // const cache = new InMemoryCache();
+      // await persistCache({
+      //   cache,
+      //   storage: AsyncStorage
+      // });
 
-      const client = new ApolloClient({
-        cache,
-        request: async operation => {
-          const token = await AsyncStorage.getItem("jwt");
-          return operation.setContext({
-            headers: { Authorization: `Bearer ${token}` }
-          });
-        },
-        ...apolloClientOptions
-      });
+      // const client = new ApolloClient({
+      //   cache,
+      //   request: async operation => {
+      //     const token = await AsyncStorage.getItem("jwt");
+      //     //console.log(token);
+      //     return operation.setContext({
+      //       headers: { Authorization: `Bearer ${token}` }
+      //     });
+      //   },
+      //   ...apolloClientOptions
+      // });
 
       const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
       if (isLoggedIn === null || isLoggedIn === "false") {
@@ -52,7 +53,7 @@ export default function App() {
       }
 
       setLoaded(true);
-      setClient(client);
+      setClient(apolloClient);
     } catch (e) {
       console.log(e);
     }
