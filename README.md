@@ -4,12 +4,17 @@
 React Native v33 : include React Hooks
 
 Screens: 
-- [ ] Home
-- [ ] Search
-- [ ] Upload
-- [ ] Notifications (Challenge)
-- [ ] Profile
-- [ ] Edit Profile (Challenge)
-- [ ] Photo Detail
-- [ ] Photo Comments (Challenge)
-- [ ] Photo Likes (Challenge)
+- [x] Home
+- [x] Search
+- [x] Upload
+- [ ] Notifications
+- [x] Profile
+- [ ] Edit Profile 
+- [x] Photo Detail
+- [x] Photo Comments 
+- [x] Photo Likes 
+- [x] Comment Likes 
+- [x] Review Detail
+- [x] Chat (Message)
+- [x] Follow / UnFollow
+- [x] LogOut
