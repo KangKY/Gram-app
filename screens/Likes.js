@@ -2,12 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { Image, TouchableOpacity } from "react-native";
-import { Card } from "react-native-elements";
+
 import { useQuery } from "react-apollo-hooks";
 import { withNavigation } from "react-navigation";
 import Loader from "../components/Loader";
 
 const View = styled.View`
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;
+
+const Container = styled.View`
   justify-content: center;
   align-items: center;
   flex: 1;
@@ -68,7 +74,7 @@ function Likes({ navigation }) {
   }
   else if(!loading && data && data.seeLikes) {
     return (
-      <Card containerStyle={{padding: 0}}>  
+      <Container>  
         {data.seeLikes.length === 0 && (
           <Text> 좋아요 누른 사람이 없습니다. </Text>
         )}
@@ -96,7 +102,7 @@ function Likes({ navigation }) {
             </ListItem>
           );
         })}
-      </Card>
+      </Container>
     );
   }
 }

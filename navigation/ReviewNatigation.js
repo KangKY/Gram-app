@@ -10,7 +10,10 @@ export default createStackNavigator(
       screen: ReviewDetail,
       navigationOptions: {
         headerTitleAlign: "left",
-        title: "후기"
+        title: "후기",
+        cardStyle:{
+          backgroundColor:"#fff"
+        },
       }
     },
     WriteReview: {
@@ -35,6 +38,9 @@ export default createStackNavigator(
       headerStyle: {
         ...stackStyles
       },
+      // cardStyle:{
+      //   backgroundColor:"#fff"
+      // },
       headerBackTitle:" ",
     }
   }

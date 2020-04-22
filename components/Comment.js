@@ -139,7 +139,7 @@ const Comment = ({
           <BottomContainer>
             {/* <FromNow>{moment(createdAt).fromNow()}</FromNow> */}
 
-            {(recommentCount > 0 && showRecomment) ? (
+            {recommentCount > 0 && (showRecomment ? (
               <TouchableOpacity onPress={handleShowRecomment}>
                 <RecommentText>댓글 숨기기</RecommentText>
               </TouchableOpacity>
@@ -147,7 +147,7 @@ const Comment = ({
                <TouchableOpacity onPress={handleShowRecomment}>
                 <RecommentText>댓글 {recommentCount}개</RecommentText>
               </TouchableOpacity>
-            )}
+            ))}
 
             {likeCount > 0 && <BoldOpacity>좋아요 {likeCount} 개</BoldOpacity>}
             <BoldOpacity onPress={onReply({ user, id })}>답글 달기</BoldOpacity>

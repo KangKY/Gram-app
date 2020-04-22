@@ -3,11 +3,10 @@ import styled from "styled-components";
 import { gql } from "apollo-boost";
 import { useQuery } from "react-apollo-hooks";
 import Loader from "../../components/Loader";
-import { RefreshControl, ScrollView, Platform } from "react-native";
+import { RefreshControl, ScrollView } from "react-native";
 import Chat from "../../components/Chat";
 import useInput from "../../hooks/useInput";
-import { Input } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons";
+import SearchBar from "../../components/SearchBar";
 import constants from "../../constants";
 
 const CHATS = gql`
@@ -44,7 +43,8 @@ const View = styled.View`
 const InputView = styled.View`
   margin-bottom: 10px;
   align-items: center;
-  width: ${constants.width - 20};
+  justify-content:center;
+  width: ${constants.width};
 `;
 const Text = styled.Text``;
 
@@ -64,6 +64,10 @@ export default () => {
     }
   };
 
+  const handleSearch = async () => {
+
+  }
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -79,19 +83,10 @@ export default () => {
       ) : (
         <View>
           <InputView>
-            <Input
+            <SearchBar  
               value={searchInput.value}
-              onChangeText={searchInput.onChange}
-              placeholder="검색"
-              style={{ flex: 1 }}
-              leftIcon={
-                <Ionicons
-                  name={Platform.OS === "ios" ? "ios-search" : "md-search"}
-                  size={24}
-                  color={"black"}
-                  style={{ paddingRight: 10 }}
-                />
-              }
+              onChange={searchInput.onChange}
+              onSubmit={handleSearch} 
             />
           </InputView>
 

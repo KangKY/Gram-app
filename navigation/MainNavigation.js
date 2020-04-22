@@ -16,10 +16,12 @@ const MainNavigation = createStackNavigator(
   {
     navigationOptions : {
       headerTitleAlign:"center",
-      headerStyle : { ...stackStyles }
+      headerStyle : { ...stackStyles },
+      
     },
     
     headerMode: "none",
+    
     mode: "card"
   }
 );

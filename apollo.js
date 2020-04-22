@@ -27,6 +27,7 @@ const wsLink = new WebSocketLink({
 const request = async operation => {
   //console.log(token);
   const token = await AsyncStorage.getItem("jwt");
+  //console.log(`Token:`,token);
   operation.setContext({
     headers: { Authorization: `Bearer ${token}` }
   });

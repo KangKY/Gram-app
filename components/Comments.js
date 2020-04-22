@@ -33,6 +33,7 @@ const Touchable = styled.TouchableOpacity``;
 
 const UserName = styled.Text`
   font-weight: bold;
+  margin-right: 10px;
 `;;
 
 const CommentsContainer = styled.View`
@@ -40,18 +41,17 @@ const CommentsContainer = styled.View`
 `;
 
 const FromNow = styled.Text`
-  margin-top: 5px;
   opacity: 0.5;
   font-size: 12px;
 `;
 
 const Caption = styled.Text`
-  margin-left: 15px;
-  padding-left: 15px;
 `;
 
-const TextWrap = styled.Text`
-  padding-right:10px;
+const TextWrap = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items:center;
 `;
 
 
@@ -87,12 +87,13 @@ const Comments = ({
             >
               {user.username}
             </UserName>
-            <Caption>
-              {caption}
-            </Caption>
+            <FromNow>{moment(createdAt).fromNow()}</FromNow>
+           
           </TextWrap>
 
-          <FromNow>{moment(createdAt).fromNow()}</FromNow>
+          <Caption>
+              {caption}
+            </Caption>
         </HeaderRow>
       </Header>
 

@@ -8,6 +8,7 @@ import {
   Platform,
   View,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import useInput from "../../hooks/useInput";
 import styled from "styled-components";
@@ -57,17 +58,7 @@ export default ({ navigation }) => {
   const textInputRef = useRef();
   const review = useInput("");
   const rating = useInput(3);
-  
-  const handleRefresh = async () => {
-    try {
-      setRefreshing(true);
-      await refetch();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setRefreshing(false);
-    }
-  };
+  const [loading, setLoading] = useState(false);
 
   const [addReviewMutation] = useMutation(ADD_REVIEW, {
     refetchQueries: () => [
@@ -79,7 +70,7 @@ export default ({ navigation }) => {
     if (review.value === "") {
       return;
     }
-
+    setLoading(true);
     try {
       const {
         data: { addReview },
@@ -97,8 +88,9 @@ export default ({ navigation }) => {
       }
     } catch (e) {
       console.log(e);
-      Alert.alert("Internal Server Error", "Try later");
+      Alert.alert("Internal Server Error", "다시 시도해주세요.");
     } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +102,6 @@ export default ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <ScrollView
-        // refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
         contentContainerStyle={{
           flex: 1,
         }}
@@ -126,33 +117,33 @@ export default ({ navigation }) => {
             justifyContent: "center",
             alignItems: "center",
             paddingHorizontal: 15,
-           
           }}
         >
           <TextInput
             placeholder="후기를 남겨주세요."
             style={{
               flex: 1,
-              height:150,
-              justifyContent:"flex-start",
-              alignItems:"flex-start",
+              //height:150,
+              //justifyContent:"flex-start",
+              //alignItems:"flex-start",
+              //flexWrap: "wrap",
+              minHeight:100,
               paddingVertical: 15,
               paddingHorizontal: 10,
               backgroundColor: "#fff",
-              flexWrap: "wrap",
             }}
             multiline={true}
+            numberOfLines={4}
             ref={textInputRef}
             returnKeyType="send"
             value={review.value}
             onChangeText={review.onChange}
-            // onSubmitEditing={handleSubmit}
           />
       
         </View>
         <Touchable onPress={handleSubmit}>
           <Button>
-            <Text>등록하기</Text>
+          {loading ? <ActivityIndicator color={"black"} /> : <Text>등록하기</Text>}
           </Button>
         </Touchable>
       </ScrollView>

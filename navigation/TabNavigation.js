@@ -45,11 +45,8 @@ const stackFactory = (initialRoute, customConfig) =>
       },
       PostDetail: {
         screen: PostDetail,
-        navigationOptions: ({ navigation }) => {
-          console.log(`navigation.state:`, navigation.state);
-          return ({
-            title: "댓글",
-          })
+        navigationOptions: {
+          title: "댓글"
         }
       },
       // ReviewDetail: {
@@ -85,6 +82,9 @@ const stackFactory = (initialRoute, customConfig) =>
         headerBackTitle: null,
         headerTintColor: styles.blackColor,
         headerBackTitle:" ",
+        // cardStyle:{
+        //   backgroundColor:"#fff"
+        // }
       }
     }
   );
@@ -97,10 +97,17 @@ const TabNavigation = createBottomTabNavigator({
       headerRight: () => <MessagesLink />,
       headerTitle: () => <Image style={{height:35}} source={require("../assets/instagram.png")} resizeMode="contain" />
     }),
-    navigationOptions : {
-      tabBarIcon: ({focused}) => ( 
-        <NavIcon focused={focused} name={Platform.OS === "ios" ? "ios-home" : "md-home"}/>
-      )
+    navigationOptions :({navigation}) => {
+      //console.log(navigation.state)
+      return {
+        tabBarVisible: navigation.state.routes[navigation.state.index].routeName === 'PostDetail' ? false:true,
+        tabBarIcon: ({ focused }) => (
+          <NavIcon
+            focused={focused}
+            name={Platform.OS === "ios" ? "ios-home" : "md-home"}
+          />
+        ),
+      };
     }
   },
   Search: {
@@ -150,7 +157,7 @@ const TabNavigation = createBottomTabNavigator({
     showLabel:false,
     style : {
       backgroundColor:"#FAFAFA"
-    }
+    },
   }
 });
 
