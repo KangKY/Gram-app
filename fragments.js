@@ -15,6 +15,7 @@ export const POST_FRAGMENT = gql`
       url
     }
     avgRating
+    commentCount
     reviewCount
     likeCount
     isLiked
@@ -27,7 +28,10 @@ export const POST_FRAGMENT = gql`
         username
       }
     }
-
+    tags {
+      id
+      text
+    }
     createdAt
   }
 `;

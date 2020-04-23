@@ -79,6 +79,7 @@ const Post = ({
   caption,
   comments = [],
   isLiked: isLikedProp,
+  tags = [],
   navigation
 }) => {
   const [isLiked, setIsLiked] = useState(isLikedProp);

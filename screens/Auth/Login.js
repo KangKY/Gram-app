@@ -9,6 +9,7 @@ import { Alert } from "react-native";
 import { LOG_IN } from "./AuthQueries";
 import { useMutation } from "react-apollo-hooks";
 import { useLogIn } from "../../AuthContext";
+import { ME } from "../Profile";
 
 const View = styled.View`
   justify-content: center;
@@ -29,8 +30,9 @@ export default ({ navigation }) => {
   const [requestLoginMutation] = useMutation(LOG_IN, {
     variables: {
       email: emailInput.value,
-      password: passwordInput.value
-    }
+      password: passwordInput.value,
+    },
+    refetchQueries: () => [{ query: ME }],
   });
 
   const handleLogin = async () => {
