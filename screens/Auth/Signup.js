@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Alert, TouchableWithoutFeedback, Keyboard } from "react-native";
 import styled from "styled-components";
 //import { Facebook } from 'expo';
@@ -108,6 +108,11 @@ export default ({ navigation }) => {
       //setLoading(true);
     }
   }
+
+  useEffect(() => {
+    Facebook.initializeAsync("191348122101549");
+  },[])
+
   return (
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

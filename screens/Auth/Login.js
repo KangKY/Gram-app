@@ -31,8 +31,7 @@ export default ({ navigation }) => {
     variables: {
       email: emailInput.value,
       password: passwordInput.value,
-    },
-    refetchQueries: () => [{ query: ME }],
+    }
   });
 
   const handleLogin = async () => {
